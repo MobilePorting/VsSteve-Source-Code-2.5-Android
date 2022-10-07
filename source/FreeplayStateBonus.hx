@@ -157,7 +157,7 @@ class FreeplayStateBonus extends MusicBeatState
 		 */
 
                 #if android
-		addVirtualPad(LEFT_FULL, A_B);
+		addVirtualPad(UP_DOWN, A_B);
 		#end
 
 		super.create();
@@ -199,17 +199,10 @@ class FreeplayStateBonus extends MusicBeatState
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
 
-		#if android
-		var upP = virtualPad.buttonUp.justPressed;
-		var downP = virtualPad.buttonDown.justPressed;
-		var accepted = virtualPad.buttonA.justPressed;
-		var BACK = virtualPad.buttonB.justPressed;
-		#elseif desktop
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
-		var BACK = controls.BACK;
-		#end
+		var UP_P = #if android virtualPad.buttonUp.justPressed || #end controls.UP_P;
+		var DOWN_P = #if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P;
+		var accepted = #if android virtualPad.buttonA.justPressed || #end controls.ACCEPT;
+		var BACK = #if android virtualPad.buttonB.justPressed || #end controls.BACK;
 
 		if (startscroll == true)
 			{
@@ -232,11 +225,11 @@ class FreeplayStateBonus extends MusicBeatState
 		});
 			}
 
-		if (upP)
+		if (UP_P)
 		{
 			changeSelection(-1);
 		}
-		if (downP)
+		if (DOWN_P)
 		{
 			changeSelection(1);
 		}

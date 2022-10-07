@@ -198,21 +198,14 @@ class FreeplayState extends MusicBeatState
 			lerpScore = intendedScore;
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
-		#if android
-		var UP_P = virtualPad.buttonUp.justPressed;
-		var DOWN_P = virtualPad.buttonDown.justPressed;
-		var LEFT_P = virtualPad.buttonLeft.justPressed;
-		var RIGHT_P = virtualPad.buttonRight.justPressed;
-		var accepted = virtualPad.buttonA.justPressed;
-		var BACK = virtualPad.buttonB.justPressed;
-		#elseif desktop
-		var UP_P = controls.UP_P;
-		var DOWN_P = controls.DOWN_P;
-		var LEFT_P = controls.LEFT_P;
-		var RIGHT_P = controls.RIGHT_P;
-		var accepted = controls.ACCEPT;
-		var BACK = controls.BACK;
-		#end
+
+		var UP_P = #if android virtualPad.buttonUp.justPressed || #end controls.UP_P;
+		var DOWN_P = #if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P;
+		var LEFT_P = #if android virtualPad.buttonLeft.justPressed || #end controls.LEFT_P;
+		var RIGHT_P = #if android virtualPad.buttonRight.justPressed || #end controls.RIGHT_P;
+		var accepted = #if android virtualPad.buttonA.justPressed || #end controls.ACCEPT;
+		var BACK = #if android virtualPad.buttonB.justPressed || #end controls.BACK;
+
 		if (UP_P)
 		{
 			changeSelection(-1);

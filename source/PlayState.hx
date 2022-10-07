@@ -1342,7 +1342,11 @@ class PlayState extends MusicBeatState
 
   if (SONG.song.toLowerCase() == 'suit up') {
     achievementBlock = new FlxSprite(1100, 300);
+    #if android
+    achievementBlock.frames = Paths.getSparrowAtlas('achievement/BlockAndroid', 'shared');
+    #else
     achievementBlock.frames = Paths.getSparrowAtlas('achievement/Block', 'shared');
+    #end
     achievementBlock.animation.addByPrefix('Block', 'ACHD', 24, false);
     achievementBlock.antialiasing = false;
     achievementBlock.alpha = 0;

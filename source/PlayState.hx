@@ -2,10 +2,6 @@ package;
 //If youre seeing this... Tiago here...
 //me: ok
 
-#if android
-import android.flixel.FlxVirtualPad;
-#end
-
 import Options.SpectatorMode;
 import flixel.input.keyboard.FlxKey;
 import haxe.Exception;

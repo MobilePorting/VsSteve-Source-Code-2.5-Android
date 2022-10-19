@@ -435,7 +435,7 @@ class MainMenuState extends MusicBeatState
                 pressCount == 1;
                 }
 				
-		if (FlxG.android.justReleased.BACK || pressCount == 1)
+		if (#if android FlxG.android.justReleased.BACK || #end pressCount == 1)
 			{
 				//new FlxTimer().start(0.001, function(tmr:FlxTimer)
 				//{

@@ -2737,7 +2737,7 @@ if (detectAttack) {
 detectSpace();
 }
 if (SONG.song.toLowerCase() == 'suit up') {
-if (virtualPad.buttonB.justPressed) {
+if (#if android virtualPad.buttonB.justPressed || #end FlxG.keys.justPressed.SPACE) {
 boyfriend.playAnim('block', true);
 if (oneTimeUse == false)
 hotbar.animation.play('Shield', true);
@@ -2772,9 +2772,7 @@ oneTimeUse = true;
 
 if (SONG.song.toLowerCase() != 'practice' || SONG.song.toLowerCase() != 'entity') {
 
-#if android
-var accepted = virtualPad.buttonA.justPressed;
-#end
+var accepted = #if android virtualPad.buttonA.justPressed || #end FlxG.keys.anyJustPressed([FlxKey.fromString(FlxG.save.data.regenPotionBind)]);
 
 if (accepted && oneTimeUse == false) {
 if (SONG.song.toLowerCase() == 'suit up')
@@ -4435,7 +4433,7 @@ FlxG.camera.shake(0.05,
 }
 
 function bfBlock() {
-if (virtualPad.buttonB.justPressed) {
+if (#if android virtualPad.buttonB.justPressed || #end FlxG.keys.justPressed.SPACE) {
 boyfriend.playAnim('block', true);
 if (oneTimeUse == false)
 hotbar.animation.play('Shield', true);
@@ -4530,7 +4528,7 @@ achievementBlock.alpha = 0;
 var pressCounter = 0;
 
 function detectSpace() {
-if (virtualPad.buttonB.justPressed) {
+if (#if android virtualPad.buttonB.justPressed || #end FlxG.keys.justPressed.SPACE) {
 pressCounter += 1;
 trace('tap');
 pressedSpace = true;

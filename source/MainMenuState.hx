@@ -236,7 +236,7 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 
-		var enter:Bool = FlxG.android.justReleased.BACK;
+		var enter:Bool = #if android || FlxG.android.justReleased.BACK #end controls.ACCEPT;
 
 		if (FlxG.keys.justPressed.E)
 			if (pressCount == 0)

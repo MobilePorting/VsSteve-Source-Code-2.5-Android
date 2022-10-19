@@ -430,12 +430,8 @@ class MainMenuState extends MusicBeatState
 						});
 						
 				}
-                if (#if android FlxG.android.justReleased.BACK #end)
-                {
-                pressCount == 1;
-                }
 				
-		if (#if android FlxG.android.justReleased.BACK || #end pressCount == 1)
+		if (#if android FlxG.android.justReleased.BACK || #end controls.ACCEPT #if !mobile || pressCount == 6 #end)
 			{
 				//new FlxTimer().start(0.001, function(tmr:FlxTimer)
 				//{
@@ -448,7 +444,7 @@ class MainMenuState extends MusicBeatState
 				//});
 				FlxG.camera.shake(0.05, 360);
 
-				if(FlxG.android.justReleased.BACK)
+				if(#if android FlxG.android.justReleased.BACK || #end controls.ACCEPT #if !mobile || pressCount == 6 #end)
 				{
 					PlayState.SONG = Song.loadFromJson('entity', 'entity');
 					PlayState.isStoryMode = false;

@@ -2,10 +2,6 @@ package;
 //If youre seeing this... Tiago here...
 //me: ok
 
-#if android
-import android.flixel.FlxVirtualPad;
-#end
-
 import Options.SpectatorMode;
 import flixel.input.keyboard.FlxKey;
 import haxe.Exception;
@@ -1342,11 +1338,7 @@ class PlayState extends MusicBeatState
 
   if (SONG.song.toLowerCase() == 'suit up') {
     achievementBlock = new FlxSprite(1100, 300);
-    #if android
-    achievementBlock.frames = Paths.getSparrowAtlas('achievement/BlockAndroid', 'shared');
-    #else
-    achievementBlock.frames = Paths.getSparrowAtlas('achievement/Block', 'shared');
-    #end
+    achievementBlock.frames = Paths.getSparrowAtlas(#if mobile 'achievement/BlockAndroid' #else 'achievement/Block' #end, 'shared');//lazy to change Android to Mobile lmfao
     achievementBlock.animation.addByPrefix('Block', 'ACHD', 24, false);
     achievementBlock.antialiasing = false;
     achievementBlock.alpha = 0;
@@ -1446,7 +1438,7 @@ class PlayState extends MusicBeatState
 
   add(camFollow);
 
-  FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / (cast (Lib.current.getChildAt(0), Main)).getFPS() + 1));
+  FlxG.camera.follow(camFollow, LOCKON, 0.04 * (30 / (cast (Lib.current.getChildAt(0), Main)).getFPS()#if mobile + 1 #else + 1.5 #end));
   FlxG.camera.zoom = defaultCamZoom;
   FlxG.camera.focusOn(camFollow.getPosition());
 
@@ -1588,10 +1580,6 @@ class PlayState extends MusicBeatState
   doof.cameras = [camHUD];
   hotbar.cameras = [camHUD];
 
-  #if android
-  addAndroidControls();
-  #end
-
   if (SONG.song.toLowerCase() == 'entity')
     vignette.cameras = [camHUD];
 
@@ -1603,6 +1591,10 @@ class PlayState extends MusicBeatState
   kadeEngineWatermark.cameras = [camHUD];
   if (loadRep)
     replayTxt.cameras = [camHUD];
+
+  #if mobile
+  addMobileControls();
+  #end
 
 startingSong = true;
 
@@ -1716,8 +1708,8 @@ public static var luaModchart: ModchartState = null;
 
 function startCountdown(): Void
 {
-#if android
-androidControls.visible = true;
+#if mobile
+mobileControls.visible = true;
 #end
 
 inCutscene = false;
@@ -3583,8 +3575,8 @@ endSong();
 
 function endSong(): Void
 {
-#if android
-androidControls.visible = false;
+#if mobile
+mobileControls.visible = false;
 #end
 
 FlxG.save.data.SpectatorMode = false;

@@ -1,4 +1,4 @@
-package android.flixel;
+package mobile.flixel;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -17,7 +17,7 @@ import openfl.utils.Assets;
  * A virtual thumbstick - useful for input on mobile devices.
  *
  * @author Ka Wing Chin
- * @modification author Saw (M.A. Jigsaw) to work only with touch and to use custom assets
+ * @author Mihai Alexandru (M.A. Jigsaw) to work only with touch and to use custom assets
  */
 class FlxJoyStick extends FlxSpriteGroup
 {
@@ -134,8 +134,8 @@ class FlxJoyStick extends FlxSpriteGroup
 	function createBase():Void
 	{
 		base = new FlxSprite(0,
-			0).loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/android/joystick.png'),
-				Assets.getText('assets/android/joystick.xml'))
+			0).loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/mobile/joystick.png'),
+				Assets.getText('assets/mobile/joystick.xml'))
 				.getByName('base')));
 		base.resetSizeFromFrame();
 		base.x += -base.width * 0.5;
@@ -143,7 +143,7 @@ class FlxJoyStick extends FlxSpriteGroup
 		base.scrollFactor.set();
 		base.solid = false;
 		base.immovable = true;
-		base.alpha = AndroidControls.getOpacity();
+		base.alpha = MobileControls.getOpacity();
 		#if FLX_DEBUG
 		base.ignoreDrawDebug = true;
 		#end
@@ -156,8 +156,8 @@ class FlxJoyStick extends FlxSpriteGroup
 	function createThumb():Void
 	{
 		thumb = new FlxSprite(0,
-			0).loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/android/joystick.png'),
-				Assets.getText('assets/android/joystick.xml'))
+			0).loadGraphic(FlxGraphic.fromFrame(FlxAtlasFrames.fromSparrow(Assets.getBitmapData('assets/mobile/joystick.png'),
+				Assets.getText('assets/mobile/joystick.xml'))
 				.getByName('thumb')));
 		thumb.resetSizeFromFrame();
 		thumb.x += -thumb.width * 0.5;
@@ -165,7 +165,7 @@ class FlxJoyStick extends FlxSpriteGroup
 		thumb.scrollFactor.set();
 		thumb.solid = false;
 		thumb.immovable = true;
-		thumb.alpha = AndroidControls.getOpacity();
+		thumb.alpha = MobileControls.getOpacity();
 		#if FLX_DEBUG
 		thumb.ignoreDrawDebug = true;
 		#end

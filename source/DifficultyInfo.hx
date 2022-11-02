@@ -76,6 +76,8 @@ class DifficultyInfo extends MusicBeatState
 		for (touch in FlxG.touches.list)
 		if (touch.justPressed)
 		{
+                ExtrasState.selectedBonus = false;
+                ExtrasState.selectedOthers = false;
 		leftStateWarn = true;
 		FlxG.switchState(new FreeplayState());
 		}
@@ -92,6 +94,8 @@ class DifficultyInfo extends MusicBeatState
 		}
 		else if (controls.ACCEPT)
 		{
+                        ExtrasState.selectedBonus = false;
+                        ExtrasState.selectedOthers = false;
 			leftStateWarn = true;
 			FlxG.switchState(new FreeplayState());
 		}

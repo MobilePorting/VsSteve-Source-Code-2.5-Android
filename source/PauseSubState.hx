@@ -94,7 +94,6 @@ class PauseSubState extends MusicBeatSubstate
 		#end
 	}
 
-
 	override function update(elapsed:Float)
 	{
 		if (pauseMusic.volume < 0.5)
@@ -102,33 +101,20 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);	
 
-		#if android
-		var UP_P = virtualPad.buttonUp.justPressed;
-		var DOWN_P = virtualPad.buttonDown.justPressed;
-		var LEFT_P = virtualPad.buttonLeft.justPressed;
-		var RIGHT_P = virtualPad.buttonRight.justPressed;
-		var accepted = virtualPad.buttonA.justPressed;
-		#elseif desktop
-		var UP_P = controls.UP_P;
-		var DOWN_P = controls.DOWN_P;
-		var LEFT_P = controls.LEFT_P;
-		var RIGHT_P = controls.RIGHT_P;
-		var accepted = controls.ACCEPT;
-		#end
 		var oldOffset:Float = 0;
 		var songPath = 'assets/data/' + PlayState.SONG.song.toLowerCase() + '/';
 
-		if (UP_P)
+		if (#if android virtualPad.buttonUp.justPressed || #end controls.UP_P)
 		{
 			changeSelection(-1);
    
-		}else if (DOWN_P)
+		}else if (#if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P)
 		{
 			changeSelection(1);
 		}
 		
 		#if cpp
-			else if (LEFT_P)
+			else if (#if android virtualPad.buttonLeft.justPressed || #end controls.LEFT_P)
 			{
 				oldOffset = PlayState.songOffset;
 				PlayState.songOffset -= 1;
@@ -155,7 +141,7 @@ class PauseSubState extends MusicBeatSubstate
 					cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 					offsetChanged = true;
 				}
-			}else if (RIGHT_P)
+			}else if (#if android virtualPad.buttonRight.justPressed || #end controls.RIGHT_P)
 			{
 				oldOffset = PlayState.songOffset;
 				PlayState.songOffset += 1;
@@ -183,7 +169,7 @@ class PauseSubState extends MusicBeatSubstate
 			}
 		#end
 
-		if (accepted)
+		if (#if android virtualPad.buttonA.justPressed || #end controls.ACCEPT)
 		{
 			var daSelected:String = menuItems[curSelected];
 
@@ -225,7 +211,8 @@ class PauseSubState extends MusicBeatSubstate
 						}
 						if (FlxG.save.data.fpsCap > 290)
 							(cast (Lib.current.getChildAt(0), Main)).setFPSCap(290);
-						
+					ExtrasState.selectedBonus = false;
+                                        ExtrasState.selectedOthers = false;
 					FlxG.switchState(new FreeplayState());
 				case "Exit to extras":
 					if(PlayState.loadRep)

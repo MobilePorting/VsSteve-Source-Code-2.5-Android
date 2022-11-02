@@ -28,6 +28,9 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
+        Paths.clearUnusedMemory();
+        Paths.clearStoredMemory();
+
 	var curSelected:Int = 0;
 	var menuBG:FlxSprite;
 	var menuBGClone:FlxSprite;

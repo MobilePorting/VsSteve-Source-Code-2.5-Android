@@ -27,6 +27,9 @@ using StringTools;
 
 class ExtrasState extends MusicBeatState
 {
+        public static var selectedBonus:Bool;
+        public static var selectedOthers:Bool;
+
 	var curSelected:Int = 0;
 	var menuItems:FlxTypedGroup<FlxSprite>;
 

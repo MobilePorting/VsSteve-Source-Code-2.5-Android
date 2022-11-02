@@ -47,11 +47,14 @@ class OptionsMenu extends MusicBeatState
 		]),
 		
 		new OptionCategory("Misc", [
-                        new FPSOption("Toggle the FPS Counter"),
+			new FPSOption("Toggle the FPS Counter"),
 			new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
 			new WatermarkOption("Enable and disable all watermarks from the engine.")
-		])
-		
+		]),
+
+		new OptionCategory("Graphic", [
+                    new RenderOption("change rendering method"),
+                ])
 	];
 
 	public var acceptInput:Bool = true;
@@ -91,7 +94,7 @@ class OptionsMenu extends MusicBeatState
 
 		versionShit = new FlxText(5, FlxG.height + 40, 0, "Offset (Left, Right, Shift for slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription, 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		
 		blackBorder = new FlxSprite(-30,FlxG.height + 40).makeGraphic((Std.int(versionShit.width + 900)),Std.int(versionShit.height + 600),FlxColor.BLACK);
 		blackBorder.alpha = 0.5;
@@ -103,7 +106,7 @@ class OptionsMenu extends MusicBeatState
 		FlxTween.tween(versionShit,{y: FlxG.height - 18},2,{ease: FlxEase.elasticInOut});
 		FlxTween.tween(blackBorder,{y: FlxG.height - 18},2, {ease: FlxEase.elasticInOut});
 
-		#if android
+                #if android
 		addVirtualPad(LEFT_FULL, A_B_C);
                 #end
 
@@ -121,25 +124,20 @@ class OptionsMenu extends MusicBeatState
                 if (virtualPad.buttonC.justPressed)
                 {
                 removeVirtualPad();
-                openSubState(new mobile.MobileControlsSubState());
+		openSubState(new mobile.MobileControlsSubState());
                 }
                 #end
-
-                var UP_P = #if android virtualPad.buttonUp.justPressed || #end controls.UP_P;
-		var DOWN_P = #if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P;
-		var accepted = #if android virtualPad.buttonA.justPressed || #end controls.ACCEPT;
-		var BACK = #if android virtualPad.buttonB.justPressed || #end controls.BACK;
 
 		if(acceptInput)
 		{
 
-			if (BACK && !isCat)
+			if (controls.BACK && !isCat)
 				FlxG.switchState(new MainMenuState());
-			else if (BACK)
+			else if (#if android virtualPad.buttonB.justPressed || #end controls.BACK)
 			{
 				isCat = false;
 				grpControls.clear();
-				for (i in 0...options.length)  
+				for (i in 0...options.length)
 					{
 						var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
 						controlLabel.isMenuItem = true;
@@ -150,9 +148,9 @@ class OptionsMenu extends MusicBeatState
 					}
 				curSelected = 0;
 			}
-			if (UP_P)
+			if (#if android virtualPad.buttonUp.justPressed || #end controls.UP_P)
 				changeSelection(-1);
-			if (DOWN_P)
+			if (#if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P)
 				changeSelection(1);
 			
 			if (isCat)
@@ -216,7 +214,7 @@ class OptionsMenu extends MusicBeatState
 			if (controls.RESET)
 					FlxG.save.data.offset = 0;
 
-			if (accepted)
+			if (#if android virtualPad.buttonA.justPressed || #end controls.ACCEPT)
 			{
 				if (isCat)
 				{

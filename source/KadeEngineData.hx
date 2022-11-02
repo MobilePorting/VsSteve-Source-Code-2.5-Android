@@ -5,12 +5,11 @@ class KadeEngineData
 {
     public static function initSave()
     {
+                if(FlxG.save.data.render==null){FlxG.save.data.render=0;}
                 if (FlxG.save.data.newInput == null)
 			FlxG.save.data.newInput = true;
-
                 if (FlxG.save.data.middleScroll == null)
                         FlxG.save.data.middleScroll = false;
-
 		if (FlxG.save.data.downscroll == null)
 			FlxG.save.data.downscroll = false;
 
@@ -44,7 +43,7 @@ class KadeEngineData
 
 		if (FlxG.save.data.fpsCap > 285 || FlxG.save.data.fpsCap < 60)
 			FlxG.save.data.fpsCap = 60; // baby proof so you can't hard lock ur copy of kade engine
-		
+
 		if (FlxG.save.data.scrollSpeed == null)
 			FlxG.save.data.scrollSpeed = 1;
 
@@ -76,7 +75,7 @@ class KadeEngineData
 			FlxG.save.data.botplay = false;
 
 		if (FlxG.save.data.cpuStrums == null)
-			FlxG.save.data.cpuStrums = true;
+			FlxG.save.data.cpuStrums = false;
 
 		Conductor.recalculateTimings();
 

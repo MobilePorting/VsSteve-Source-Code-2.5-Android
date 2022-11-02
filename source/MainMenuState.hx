@@ -238,7 +238,7 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 
-		var enter:Bool = #if android || FlxG.android.justReleased.BACK #end controls.ACCEPT;
+		var enter:Bool = FlxG.android.justReleased.BACK;
 
 		if (FlxG.keys.justPressed.E)
 			if (pressCount == 0)
@@ -432,8 +432,12 @@ class MainMenuState extends MusicBeatState
 						});
 						
 				}
+                if (#if android FlxG.android.justReleased.BACK #end)
+                {
+                pressCount == 1;
+                }
 				
-		if (#if android FlxG.android.justReleased.BACK || #end controls.ACCEPT #if !mobile || pressCount == 6 #end)
+		if (FlxG.android.justReleased.BACK || pressCount == 1)
 			{
 				//new FlxTimer().start(0.001, function(tmr:FlxTimer)
 				//{
@@ -446,7 +450,7 @@ class MainMenuState extends MusicBeatState
 				//});
 				FlxG.camera.shake(0.05, 360);
 
-				if(#if android FlxG.android.justReleased.BACK || #end controls.ACCEPT #if !mobile || pressCount == 6 #end)
+				if(FlxG.android.justReleased.BACK)
 				{
 					PlayState.SONG = Song.loadFromJson('entity', 'entity');
 					PlayState.isStoryMode = false;

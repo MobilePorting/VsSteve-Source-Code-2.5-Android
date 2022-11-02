@@ -165,6 +165,10 @@ class FreeplayState extends MusicBeatState
 			trace(md);
 		 */
 
+                var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
+
                 #if PRELOAD_ALL
 		#if android
 		var leText:String = "Press C to listen to the Song.";

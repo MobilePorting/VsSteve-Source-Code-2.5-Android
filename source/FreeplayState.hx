@@ -13,7 +13,6 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.utils.Assets;
 
-
 #if windows
 import Discord.DiscordClient;
 #end
@@ -22,6 +21,8 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
+        public var initSonglist = null;
+
 	var songs:Array<SongMetadata> = [];
 
 	var tween:FlxTween;
@@ -45,7 +46,12 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
+		if (ExtrasState.selectedOthers == true) {
+		initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplayOthers')); }
+                if (ExtrasState.selectedBonus == true) {
+                initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplayBonus')); }
+                if (ExtrasState.selectedOthers == false && ExtrasState.selectedBonus == false) {
+                initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist')); }
 
 		for (i in 0...initSonglist.length)
 		{
@@ -157,9 +163,28 @@ class FreeplayState extends MusicBeatState
 
 			trace(md);
 		 */
+
+                #if PRELOAD_ALL
 		#if android
-		addVirtualPad(LEFT_FULL, A_B);
+		var leText:String = "Press C to listen to the Song.";
+		var size:Int = 16;
+		#else
+		var leText:String = "Press SPACE to listen to the Song.";
+		var size:Int = 16;
 		#end
+		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, leText, size);
+		text.setFormat(Paths.font("vcr.ttf"), size, FlxColor.WHITE, RIGHT);
+		text.scrollFactor.set();
+		add(text);
+                #end
+
+		#if android
+                if (ExtrasState.selectedBonus == true) {
+		addVirtualPad(UP_DOWN, A_B_C); }
+                if (ExtrasState.selectedBonus == false) {
+                addVirtualPad(LEFT_FULL, A_B_C); }
+		#end
+
 		super.create();
 	}
 
@@ -199,34 +224,26 @@ class FreeplayState extends MusicBeatState
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
 
-		var UP_P = #if android virtualPad.buttonUp.justPressed || #end controls.UP_P;
-		var DOWN_P = #if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P;
-		var LEFT_P = #if android virtualPad.buttonLeft.justPressed || #end controls.LEFT_P;
-		var RIGHT_P = #if android virtualPad.buttonRight.justPressed || #end controls.RIGHT_P;
-		var accepted = #if android virtualPad.buttonA.justPressed || #end controls.ACCEPT;
-		var BACK = #if android virtualPad.buttonB.justPressed || #end controls.BACK;
-
-		if (UP_P)
+		if (#if android virtualPad.buttonUp.justPressed || #end controls.UP_P)
 		{
 			changeSelection(-1);
 		}
-		if (DOWN_P)
+		if (#if android virtualPad.buttonDown.justPressed || #end controls.DOWN_P)
 		{
 			changeSelection(1);
 		}
 
-		if (LEFT_P)
+		if (#if android virtualPad.buttonLeft.justPressed || #end controls.LEFT_P)
 			changeDiff(-1);
-		if (RIGHT_P)
+		if (#if android virtualPad.buttonRight.justPressed || #end controls.RIGHT_P)
 			changeDiff(1);
 
-		if (BACK)
+		if (#if android virtualPad.buttonB.justPressed || #end controls.BACK)
 		{
 			FlxG.switchState(new MainMenuState());
 		}
 
-
-		if (startscroll == true)
+                if (startscroll == true)
 			{
 				startscroll = false;
 				panoclone.x = 1280;
@@ -241,14 +258,14 @@ class FreeplayState extends MusicBeatState
 			{
 				tween.cancel();
 				startscroll = true;
-			}
-		});
-			}
-		});
+			}});
+			}});
 			}
 
-		if (accepted)
+		if (#if android virtualPad.buttonA.justPressed || #end FlxG.keys.justPressed.ENTER)
 		{
+			destroyFreeplayVocals();
+
 			var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 
 			trace(poop);
@@ -260,6 +277,29 @@ class FreeplayState extends MusicBeatState
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
+
+                if(#if mobile virtualPad.buttonC.justPressed || #end FlxG.keys.justPressed.SPACE) {
+                if(instPlaying != curSelected) {
+                #if PRELOAD_ALL
+		destroyFreeplayVocals();
+		FlxG.sound.music.volume = 0;
+		var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
+		PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+		if (PlayState.SONG.needsVoices)
+			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
+		else
+		        vocals = new FlxSound();
+
+		FlxG.sound.list.add(vocals);
+		FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
+		vocals.play();
+		vocals.persist = true;
+		vocals.looped = true;
+		vocals.volume = 0.7;
+		instPlaying = curSelected;
+		#end
+                }
+                }
 	}
 
 	function changeDiff(change:Int = 0)
@@ -288,6 +328,8 @@ class FreeplayState extends MusicBeatState
 		}
 	}
 
+        private static var vocals:FlxSound = null;
+        var instPlaying:Int = -1;
 	function changeSelection(change:Int = 0)
 	{
 		#if !switch
@@ -338,6 +380,14 @@ class FreeplayState extends MusicBeatState
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
+	}
+
+        public static function destroyFreeplayVocals() {
+		if(vocals != null) {
+			vocals.stop();
+			vocals.destroy();
+		}
+		vocals = null;
 	}
 }
 

@@ -246,14 +246,17 @@ class ExtrasState extends MusicBeatState
 		switch (daChoice)
 		{
 			case 'bonus songs':
-				FlxG.switchState(new FreeplayStateBonus());
+                                selectedBonus = true;
+                                selectedOthers = false;
+				FlxG.switchState(new FreeplayState());
 				trace("bonus songs!");
 
 			case 'other songs':
+                                selectedBonus = false;
+                                selectedOthers = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));			
-				//FlxG.switchState(new FreeplayStateOthers());
-				trace("Other Songs");
-				trace("Disabled!");
+				//FlxG.switchState(new FreeplayState());
+				trace("Other Songs Is Disabled!");
 		}
 	}
 
